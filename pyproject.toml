@@ -27,8 +27,8 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 # Hook entry scripts must run as __main__ with sys.path bootstrap.
-"hooks/*.py" = ["E402"]
-"scripts/*.py" = ["E402"]
+".agents/hooks/*.py" = ["E402"]
+".agents/scripts/*.py" = ["E402"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

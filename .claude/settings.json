@@ -13,7 +13,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_git_mutations.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_git_mutations.py\""
           }
         ],
         "description": "Block a specific set of dangerous git operations (force flags, hard resets, branch/commit switching), except inside an agent-owned worktree (.agents/worktrees/<name>); push is blocked except the one canonical `git push -u origin HEAD:<branch>` form."
@@ -23,7 +23,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_grep_search.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_grep_search.py\""
           }
         ],
         "description": "Block bare grep/egrep/fgrep search invocations; require rg (ripgrep) instead. grep piped after another command to filter its output stays allowed."
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_large_file_dump.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_large_file_dump.py\""
           }
         ],
         "description": "Block shell commands that would put more than 120 lines of a file into an agent's context in one unfiltered read. A cost guard, not a security boundary; fails open rather than costing a wasted turn."
@@ -43,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_git_internals_edit.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_git_internals_edit.py\""
           }
         ],
         "description": "Block direct file-edit writes anywhere inside git's administrative area, the per-user git configuration, and plan-run authorization records under docs/runs/plan-runs/. Fails closed."
@@ -53,7 +53,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_protected_path_write.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_protected_path_write.py\""
           }
         ],
         "description": "Block shell-issued writes (redirects, tee, sed -i, cp/mv/ln, rm, curl -o, ...) whose target resolves into git's administrative area or a plan-run authorization record. Interpreter-mediated writes are deliberately NOT closed."
@@ -63,7 +63,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_memory_write.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_memory_write.py\""
           }
         ],
         "description": "Block un-consented agent-memory writes to ~/.claude/**/memory/ and .remember/; memories must be recorded deliberately in tracked repo files after the user explicitly agrees."
@@ -73,7 +73,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/limit_review_loop_iterations.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/limit_review_loop_iterations.py\""
           }
         ],
         "description": "Enforce code-review-fix-loop's --max-iterations default of 5 by denying the sixth dispatch of its always-on first dimension (code-reviewer) within one session. A 20-minute idle gap starts a fresh run."
@@ -109,7 +109,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/inject_subagent_handback_contract.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/inject_subagent_handback_contract.py\""
           }
         ],
         "description": "Inject the 'Not covered' handback contract into every read-only subagent type (the set is owned by READ_ONLY_AGENT_TYPES in agentic_workflows/agent_handback_contract.py), so an agent that stops early says what it did not reach. Context-only: it cannot change the subagent's model, tools, or prompt."
@@ -121,7 +121,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/log_instructions_loaded.py\""
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/log_instructions_loaded.py\""
           }
         ],
         "description": "Append every instruction-file load to logs/instructions_loaded.jsonl with its load_reason. Observational only — cannot filter or block a rule from loading."

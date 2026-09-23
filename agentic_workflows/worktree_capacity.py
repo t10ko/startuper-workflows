@@ -53,9 +53,15 @@ from agentic_workflows.git_checkout_resolution import (
 from agentic_workflows.plan_run_paths import PLAN_RUNS_DIR
 from agentic_workflows.plan_run_state import parse_plan_run_state
 
-# The single machine-readable owner of N (REQ-011). Prose references this
+# The single machine-readable owner of N. Prose references this
 # file; nothing restates the number.
 CONFIG_PATH = Path(".agents/config.toml")
+
+# Consumer-local override layer, resolved first when present. Lives OUTSIDE
+# the `.agents` tree on purpose: a consumer's `.agents` may be a symlink into
+# a shared checkout of this repo, and a local override written inside it
+# would leak into every other consumer of that checkout.
+LOCAL_CONFIG_PATH = Path(".agents.local.toml")
 
 # The one key N lives under (spec section 21 discretion, named here so the
 # CLI and the hook never hardcode the TOML shape).
@@ -90,6 +96,17 @@ class WorktreeEntry:
 # ---------------------------------------------------------------------------
 # Config: load N fail-closed, naming the config path (REQ-011).
 # ---------------------------------------------------------------------------
+
+
+def resolve_config_path(repo_root: Path) -> Path:
+    """The config file a decision at `repo_root` reads: the consumer-local
+    override layer when it exists, else the canonical `.agents/config.toml`.
+    One lookup, shared by the acquire CLI and the hook backstop, so the two
+    can never read different layers."""
+    local = repo_root / LOCAL_CONFIG_PATH
+    if local.is_file():
+        return local
+    return repo_root / CONFIG_PATH
 
 
 def load_max_concurrent_worktrees(config_path: Path = CONFIG_PATH) -> int:

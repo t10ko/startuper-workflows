@@ -10,7 +10,7 @@ from pathlib import Path
 def _bootstrap_runtime() -> None:
     here = Path(__file__).resolve().parent
     for candidate in (here, *here.parents):
-        if (candidate / "src" / "agentic_workflows" / "__init__.py").is_file():
+        if (candidate / "agentic_workflows" / "__init__.py").is_file():
             sys.path.insert(0, str(candidate))
             return
     # A blocking guard that cannot load must not open the gate: exit 2 blocks.

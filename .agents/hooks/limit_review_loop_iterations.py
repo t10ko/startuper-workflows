@@ -17,7 +17,7 @@ from pathlib import Path
 def _bootstrap_runtime() -> None:
     here = Path(__file__).resolve().parent
     for candidate in (here, *here.parents):
-        if (candidate / "src" / "agentic_workflows" / "__init__.py").is_file():
+        if (candidate / "agentic_workflows" / "__init__.py").is_file():
             sys.path.insert(0, str(candidate))
             return
     # Mirrors the original's behavior: a hook that cannot load exits nonzero

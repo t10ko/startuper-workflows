@@ -7,7 +7,7 @@ verify: lint test
 	@echo "verify: OK"
 
 lint:
-	uv run ruff check src hooks scripts tests
+	uv run ruff check agentic_workflows .agents/hooks .agents/scripts tests
 
 test:
 	uv run pytest tests
@@ -16,4 +16,4 @@ fmt:
 	uv run ruff check --fix src hooks scripts tests
 
 clean:
-	rm -rf .pytest_cache .ruff_cache src/agentic_workflows/__pycache__ hooks/__pycache__ scripts/__pycache__ tests/__pycache__
+	rm -rf .pytest_cache .ruff_cache agentic_workflows/__pycache__ .agents/hooks/__pycache__ .agents/scripts/__pycache__ tests/__pycache__
