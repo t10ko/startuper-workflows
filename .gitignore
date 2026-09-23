@@ -11,6 +11,7 @@ __pycache__/
 .claude/settings.json.bak.*
 logs/
 .agents.local.toml
+.zcode/plans/
 verify/review_reports/
 verify/antipattern_reports/
 verify/duplication_reports/

@@ -1,0 +1,13 @@
+{
+  "_comment": "Optional MCP servers the workflows can use. Copy to .mcp.json in a consumer repo to enable. mermaid: rendering diagrams in decision notes. repomix: repo packaging for context handoffs (see .agents/rules/repomix-protocol.md). Neither is required for the core plan/execute/review loop.",
+  "mcpServers": {
+    "mermaid": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-mermaid"]
+    },
+    "repomix": {
+      "command": "npx",
+      "args": ["-y", "repomix@latest", "--mcp"]
+    }
+  }
+}
