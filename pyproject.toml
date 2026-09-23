@@ -2,7 +2,7 @@
 name = "agentic-workflows"
 version = "0.1.0"
 description = "Standalone, multi-host agentic development workflows: planning, parallel subagent-driven development, code review loops, and guard hooks for Claude Code and ZCode."
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 license = { file = "LICENSE" }
 # Runtime is stdlib-only on purpose: consumers install this system into
 # arbitrary-language repos via symlink and invoke everything with plain python3.
@@ -16,7 +16,9 @@ dev = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+# The runtime itself uses PEP 695 `type` alias statements (process_runner),
+# so 3.12 is the oldest syntax level the checked code actually supports.
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]

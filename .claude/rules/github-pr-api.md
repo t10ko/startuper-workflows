@@ -1,0 +1,1 @@
+../../.agents/rules/github-pr-api.md

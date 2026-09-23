@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from agentic_workflows.types import JSONDict
 from agentic_workflows.python_antipattern_scanner.common import (
     extract_tool_input_contents,
     hook_target_relative_path,
@@ -10,6 +9,7 @@ from agentic_workflows.python_antipattern_scanner.common import (
     tool_input_dict,
 )
 from agentic_workflows.python_antipattern_scanner.models import AntipatternReport, RuleFinding
+from agentic_workflows.types import JSONDict
 
 from .ast_rules import scan_ast_rules
 from .line_rules import (

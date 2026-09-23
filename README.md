@@ -51,7 +51,7 @@ scale of a feature. This system is the missing orchestration layer:
 
 ## Install
 
-Prerequisites: `git`, Python 3.11+, `rg` (ripgrep). For PR landing: the
+Prerequisites: `git`, Python 3.12+, `rg` (ripgrep). For PR landing: the
 GitHub `gh` CLI, authenticated once with `gh auth login`.
 
 ```bash

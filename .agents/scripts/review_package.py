@@ -19,6 +19,7 @@ without requiring `sdd_workspace.py` to have run first in the same process.
 
 from __future__ import annotations
 
+
 # --- standalone bootstrap -------------------------------------------------
 # This script may run from a consumer repo via symlink; resolve its real
 # location and put both the runtime root and the sibling-script directory on
@@ -50,6 +51,7 @@ from sdd_workspace import (
     derive_workspace_slug,
     resolve_git_root,
 )
+
 from agentic_workflows.plan_run_paths import RUNS_DIR
 
 

@@ -23,7 +23,7 @@ Rules that keep this maintainable:
 1. **`.agents/` is the single source of truth.** Never edit `.claude/rules/…`
    or `.claude/agents/…` content directly — they're symlinks.
 2. **Runtime stays stdlib-only.** `agentic_workflows/`, `.agents/hooks/`, and
-   `.agents/scripts/` must import the standard library (3.11+) and nothing
+   `.agents/scripts/` must import the standard library (3.12+) and nothing
    else. A CI check and the test suite enforce this. Third-party tools
    (`rg`, `git`, `gh`, optional `jscpd` via `npx`) are *external commands*,
    not Python imports.

@@ -40,6 +40,7 @@ and records from any directory.
 
 from __future__ import annotations
 
+
 # --- standalone bootstrap -------------------------------------------------
 # This script may run from a consumer repo via symlink; resolve its real
 # location and put both the runtime root and the sibling-script directory on
@@ -73,8 +74,6 @@ from agentic_workflows.git_checkout_resolution import AGENT_WORKTREE_ROOT
 from agentic_workflows.plan_run_paths import PLAN_RUNS_DIR
 from agentic_workflows.time import utc_now
 from agentic_workflows.worktree_capacity import (
-    resolve_config_path,
-    CONFIG_PATH,
     CapacitySnapshot,
     HeadProbe,
     RunCapacityView,
@@ -88,6 +87,7 @@ from agentic_workflows.worktree_capacity import (
     integration_exemption_owners,
     load_leases,
     parse_worktree_list,
+    resolve_config_path,
     resolve_fail_closed,
     run_capacity_view,
     run_git_worktree_list,

@@ -102,6 +102,11 @@ for src_rule in "$SRC"/.agents/rules/*.md; do
   esac
   ln -sfn "../../.agents/rules/$name" "$TARGET/.claude/rules/$name"
 done
+# prune stale links: projections whose canonical rule file no longer exists
+for link in "$TARGET"/.claude/rules/*.md; do
+  [ -L "$link" ] || continue
+  if [ ! -e "$link" ]; then rm "$link"; echo "  pruned stale rule link $(basename "$link")"; fi
+done
 echo "  .claude/rules  linked ($(ls "$TARGET/.claude/rules" | wc -l | tr -d ' ') rules)"
 
 # agents: specialists, skill-private agents (<skill>-<agent> naming), and
@@ -120,8 +125,12 @@ for skill_agents_dir in "$SRC"/.agents/skills/*/agents; do
   done
 done
 if [ -f "$SRC/.agents/workflows/architect.md" ]; then
-  ln -sfn "../.agents/workflows/architect.md" "$TARGET/.claude/agents/architect.md"
+  ln -sfn "../../.agents/workflows/architect.md" "$TARGET/.claude/agents/architect.md"
 fi
+for link in "$TARGET"/.claude/agents/*.md; do
+  [ -L "$link" ] || continue
+  if [ ! -e "$link" ]; then rm "$link"; echo "  pruned stale agent link $(basename "$link")"; fi
+done
 echo "  .claude/agents linked ($(ls "$TARGET/.claude/agents" | wc -l | tr -d ' ') agents)"
 
 # --- consumer-local config ------------------------------------------------

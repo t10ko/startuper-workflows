@@ -32,6 +32,7 @@ the same contract `detailed-plan.md` was told to read):
 
 from __future__ import annotations
 
+
 # --- standalone bootstrap -------------------------------------------------
 # This script may run from a consumer repo via symlink; resolve its real
 # location and put both the runtime root and the sibling-script directory on
@@ -52,14 +53,13 @@ _bootstrap()
 # --------------------------------------------------------------------------
 
 import argparse
+import logging
 import re
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 
-
 from agentic_workflows.exceptions import ContractViolation
-import logging
 
 logger = logging.getLogger(__name__)
 from agentic_workflows.process_runner import run_safe_process

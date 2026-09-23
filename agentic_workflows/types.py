@@ -2,18 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TypeAlias, Union
+type JSONValue = None | bool | int | float | str | list["JSONValue"] | dict[str, "JSONValue"]
 
-JSONValue: TypeAlias = Union[
-    None,
-    bool,
-    int,
-    float,
-    str,
-    list["JSONValue"],
-    dict[str, "JSONValue"],
-]
+type JSONDict = dict[str, "JSONValue"]
 
-JSONDict: TypeAlias = dict[str, "JSONValue"]
-
-PrimitiveValue: TypeAlias = Union[None, bool, int, float, str]
+type PrimitiveValue = None | bool | int | float | str

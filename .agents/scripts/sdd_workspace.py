@@ -20,6 +20,7 @@ Two things this deliberately does not do:
 
 from __future__ import annotations
 
+
 # --- standalone bootstrap -------------------------------------------------
 # This script may run from a consumer repo via symlink; resolve its real
 # location and put both the runtime root and the sibling-script directory on

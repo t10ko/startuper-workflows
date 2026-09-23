@@ -31,6 +31,7 @@ Exit 0 when no file crosses a group boundary, 1 when one does.
 
 from __future__ import annotations
 
+
 # --- standalone bootstrap -------------------------------------------------
 # This script may run from a consumer repo via symlink; resolve its real
 # location and put both the runtime root and the sibling-script directory on
@@ -60,6 +61,7 @@ from parallel_plan_grouping import (
     label_groups,
     parse_sequential_label,
 )
+
 from agentic_workflows.markdown_fences import Fence, fence_lines
 
 _TASK_HEADING = re.compile(r"^#+[ \t]+Task[ \t]+([0-9]+)")

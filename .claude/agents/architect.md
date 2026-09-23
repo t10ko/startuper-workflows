@@ -1,1 +1,1 @@
-../.agents/workflows/architect.md
+../../.agents/workflows/architect.md

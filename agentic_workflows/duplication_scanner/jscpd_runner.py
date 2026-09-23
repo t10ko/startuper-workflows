@@ -3,10 +3,10 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-BIN_NPX = "npx"
 from agentic_workflows.exceptions import EnvironmentFaultError
 from agentic_workflows.process_runner import run_safe_process
 
+BIN_NPX = "npx"
 DEFAULT_MIN_TOKENS = 50
 DEFAULT_MIN_LINES = 5
 DEFAULT_TIMEOUT_SECONDS = 120.0

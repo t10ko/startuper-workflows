@@ -28,8 +28,7 @@ rules/
 ├── response-contract.md
 ├── root-cause-before-guardrails.md
 ├── single-source-of-truth.md
-├── sizing-agent-work.md
-└── spend-pricing-currency.md
+└── sizing-agent-work.md
 ```
 
 - `agent-worktrees.md` is the auto-loaded, agent-facing statement of the agent-owned worktree rule: `.agents/worktrees/<name>` is the one root where `git worktree add` succeeds and where a working-tree-scoped deny-list drops away; force-removing a worktree and force-deleting an `sdd/`/`plan/` branch are separately gated by target, not by standing inside one; shared-repo-state commands (`config`, `remote`, `gc --prune`, `reflog expire`, and `send-pack`) stay blocked everywhere, while `push` keeps its own separate, unchanged canonical-form authorization; and path-based ownership is a guardrail, not a security boundary against arbitrary Bash.
@@ -57,7 +56,6 @@ rules/
 - `root-cause-before-guardrails.md` requires finding and fixing the root behavioral cause of a bug before proposing a guardrail/validation check as "the fix"; a guardrail is only a safety net added afterward.
 - `single-source-of-truth.md` gives a value with one meaning exactly one owner: two writable stores of it is a defect when written, not once they diverge; duplication is collapsed, not synchronized.
 - `sizing-agent-work.md` states the four rules that decide what agent work costs, all derived from 53,622 measured turns in which 98.29% of every billed token was re-read context: a group's thinking tier follows its own work kind rather than the plan's profile, verbatim file relocation is a shell command rather than a model retyping text, tasks are cut along file ownership — a file several requirements need gets one owning task the rest consume, and two pieces fuse only when neither can be shown to work without the other — and a dispatch round trip is capped to a brief sent by path plus a five-line report.
-- `spend-pricing-currency.md` states the three obligations that keep the committed pricing rows in `agentic_workflows/spend/owned_price_table.py` trustworthy: every row's `checked_on` is re-verified against its `source_url` at least every 31 days unless the row's period has ended, adding a model or paid provider lands its pricing row in the same diff, and a retired identity keeps its row rather than being deleted.
 
 ## Claude Code projection
 

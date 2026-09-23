@@ -1,1 +1,0 @@
-../../.agents/rules/spend-pricing-currency.md

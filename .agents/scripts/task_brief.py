@@ -19,6 +19,7 @@ a stale or zero-byte one left behind by a run that matched no heading.
 
 from __future__ import annotations
 
+
 # --- standalone bootstrap -------------------------------------------------
 # This script may run from a consumer repo via symlink; resolve its real
 # location and put both the runtime root and the sibling-script directory on
@@ -49,6 +50,7 @@ from sdd_workspace import (
     derive_workspace_slug,
     resolve_git_root,
 )
+
 from agentic_workflows.markdown_fences import Fence, fence_lines
 from agentic_workflows.plan_references import (
     Reference,

@@ -1,1 +1,0 @@
-../../.agents/rules/bitbucket-pr-api.md
