@@ -38,7 +38,8 @@ from __future__ import annotations
 # sys.path before any agentic_workflows/sibling imports run.
 def _bootstrap() -> None:
     import sys as _sys
-    here = Path(__file__).resolve().parent
+    from pathlib import Path as _Path
+    here = _Path(__file__).resolve().parent
     for candidate in (here, *here.parents):
         if (candidate / "agentic_workflows" / "__init__.py").is_file():
             _sys.path.insert(0, str(candidate))
