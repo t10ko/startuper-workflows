@@ -7,6 +7,7 @@ authorized. The guard's job is to refuse the command before any of that.
 """
 
 import json
+import platform
 import subprocess
 import sys
 from pathlib import Path
@@ -130,6 +131,20 @@ FORGERY_SHAPES = [
 ]
 
 
+def _execute(command: str) -> None:
+    """Run one forgery shape for real.
+
+    The command strings are deliberately written in the BSD spelling macOS
+    ships (`sed -i '' ...`), because that is a real shape the guard must
+    refuse. GNU sed (Linux) rejects the `''` suffix argument, so the
+    execution shim rewrites only that spelling — the guard above always
+    parses the original string.
+    """
+    if platform.system() != "Darwin":
+        command = command.replace("sed -i '' ", "sed -i ")
+    subprocess.run(["bash", "-c", command], check=True, capture_output=True)
+
+
 @pytest.mark.parametrize("template", FORGERY_SHAPES)
 def test_a_bash_written_record_authorizes_a_push_the_gate_denied_and_is_refused(
     tmp_path: Path, template: str
@@ -160,7 +175,7 @@ def test_a_bash_written_record_authorizes_a_push_the_gate_denied_and_is_refused(
     assert message is not None, f"unguarded: {command}"
     assert "authorization record" in message
 
-    subprocess.run(["bash", "-c", command], check=True, capture_output=True)
+    _execute(command)
     assert _push_is_authorized(worktree), (
         "the attack must be real: if executing it does not authorize the "
         "forged push, the refusal above proves nothing"

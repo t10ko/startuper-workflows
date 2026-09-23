@@ -34,17 +34,18 @@ PROTECTED_BRANCH = "sdd/atc-auth"
 
 def _resolve_breaks_symlink_loops_silently(tmp_path: Path) -> bool:
     """Whether `Path.resolve()` resolves a symlink loop to a concrete path
-    instead of raising. CPython 3.12 and earlier raise (`RuntimeError`/`OSError`),
-    which the guard's fail-closed net converts to an undecidable-path refusal;
-    from 3.13 `os.path.realpath(strict=False)` breaks the loop silently and
-    returns the path as written. Allowing the path then is safe: the kernel
-    refuses any write through the loop with ELOOP, so the honest verdict is
-    "decidable, outside the class"."""
+    instead of raising. CPython 3.12 and earlier raise (`RuntimeError` on
+    Linux, `OSError` variants elsewhere), which the guard's fail-closed net
+    converts to an undecidable-path refusal; from 3.13
+    `os.path.realpath(strict=False)` breaks the loop silently and returns the
+    path as written. Allowing the path then is safe: the kernel refuses any
+    write through the loop with ELOOP, so the honest verdict is "decidable,
+    outside the class"."""
     (tmp_path / "probe-a").symlink_to(tmp_path / "probe-b")
     (tmp_path / "probe-b").symlink_to(tmp_path / "probe-a")
     try:
         (tmp_path / "probe-a" / "config").resolve()
-    except OSError:
+    except (OSError, RuntimeError):
         return False
     return True
 
