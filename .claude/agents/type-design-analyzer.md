@@ -1,0 +1,1 @@
+../../.agents/specialists/type-design-analyzer.md

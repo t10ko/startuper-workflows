@@ -1,0 +1,1 @@
+../../.agents/rules/model-assignment.md

@@ -1,0 +1,1 @@
+../../.agents/rules/no-hardcoded-pattern-names-in-prompts.md

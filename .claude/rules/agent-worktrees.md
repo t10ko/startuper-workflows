@@ -1,0 +1,1 @@
+../../.agents/rules/agent-worktrees.md

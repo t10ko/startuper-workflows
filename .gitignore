@@ -8,7 +8,9 @@ __pycache__/
 
 # Tooling local state
 .claude/settings.local.json
+.claude/settings.json.bak.*
 logs/
+.agents.local.toml
 verify/review_reports/
 verify/antipattern_reports/
 verify/duplication_reports/

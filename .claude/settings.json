@@ -4,7 +4,12 @@
     "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "400000"
   },
   "permissions": {
-    "deny": ["Read(.env)", "Read(.env.*)", "Read(**/*.pem)", "Read(**/*.key)"]
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -124,7 +129,7 @@
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/log_instructions_loaded.py\""
           }
         ],
-        "description": "Append every instruction-file load to logs/instructions_loaded.jsonl with its load_reason. Observational only — cannot filter or block a rule from loading."
+        "description": "Append every instruction-file load to logs/instructions_loaded.jsonl with its load_reason. Observational only \u2014 cannot filter or block a rule from loading."
       }
     ]
   }

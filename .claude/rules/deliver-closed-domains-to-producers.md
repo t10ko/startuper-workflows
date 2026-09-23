@@ -1,0 +1,1 @@
+../../.agents/rules/deliver-closed-domains-to-producers.md

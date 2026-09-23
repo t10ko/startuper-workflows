@@ -1,0 +1,1 @@
+../../.agents/specialists/diff-scout.md

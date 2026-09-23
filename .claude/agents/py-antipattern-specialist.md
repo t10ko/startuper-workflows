@@ -1,0 +1,1 @@
+../../.agents/specialists/py-antipattern-specialist.md

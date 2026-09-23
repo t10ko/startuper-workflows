@@ -1,0 +1,1 @@
+../../.agents/rules/repomix-protocol.md

@@ -1,0 +1,1 @@
+../../.agents/rules/sizing-agent-work.md

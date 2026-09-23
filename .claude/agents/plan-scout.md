@@ -1,0 +1,1 @@
+../../.agents/specialists/plan-scout.md

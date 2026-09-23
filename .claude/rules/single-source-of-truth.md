@@ -1,0 +1,1 @@
+../../.agents/rules/single-source-of-truth.md

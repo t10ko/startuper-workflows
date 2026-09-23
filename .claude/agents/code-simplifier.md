@@ -1,0 +1,1 @@
+../../.agents/specialists/code-simplifier.md

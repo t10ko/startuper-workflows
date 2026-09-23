@@ -1,0 +1,1 @@
+../../.agents/specialists/document-writer.md

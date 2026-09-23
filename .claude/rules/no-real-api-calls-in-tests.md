@@ -1,0 +1,1 @@
+../../.agents/rules/no-real-api-calls-in-tests.md

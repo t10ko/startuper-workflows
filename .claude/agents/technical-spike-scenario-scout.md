@@ -1,0 +1,1 @@
+../../.agents/skills/technical-spike/agents/scenario-scout.md
