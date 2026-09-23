@@ -1,0 +1,23 @@
+# The single machine-readable owner of the workflow system's tunables.
+# Human-only: agents never change these values.
+
+# Per-run agent-worktree cap N (the acquire script and the hook backstop
+# both read N through agentic_workflows.worktree_capacity). Prose copies of
+# the cap rule reference this file; they must not restate the number.
+# Consumers: put local overrides in .agents.local.toml at the repo root
+# instead of editing this file — a consumer's .agents tree may be a symlink
+# into a shared checkout, and overrides written inside it would leak to
+# every other consumer of that checkout.
+[worktrees]
+max_concurrent = 5
+
+# The command a run's verification step executes (code-review-fix-loop,
+# parallel-subagent-driven-development landing). Must exist in the consumer
+# project and be safe to run concurrently in separate worktrees.
+[project]
+verify_cmd = "make verify"
+
+# Fixture used by technical-spike scripts. No default: set it if you use
+# technical-spike.
+[spike]
+# fixture = "path/to/your/fixture"

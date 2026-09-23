@@ -53,10 +53,10 @@ _bootstrap()
 
 import argparse
 import re
+from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 
-from pydantic import BaseModel, ConfigDict
 
 from agentic_workflows.exceptions import ContractViolation
 import logging
@@ -105,14 +105,13 @@ class CitedFileStatus(StrEnum):
     DELETED = "deleted"
 
 
-class StalenessAnchor(BaseModel):
+@dataclass(frozen=True)
+class StalenessAnchor:
     """The point an input's citations are measured against.
 
     One model rather than two nullable fields on the result, so "a kind
     without its value" is unrepresentable instead of merely unlikely.
     """
-
-    model_config = ConfigDict(frozen=True, extra="forbid")
 
     kind: AnchorKind
     value: str
@@ -213,10 +212,9 @@ def _changed_paths(repo: Path, paths: set[str], anchor: StalenessAnchor) -> set[
     return {line.strip() for line in result.stdout.splitlines() if line.strip()}
 
 
-class StalenessResult(BaseModel):
+@dataclass(frozen=True)
+class StalenessResult:
     """One spec's staleness verdict against the current repository state."""
-
-    model_config = ConfigDict(frozen=True, extra="forbid")
 
     anchor: StalenessAnchor | None
     file_statuses: dict[str, CitedFileStatus]
