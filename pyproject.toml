@@ -1,0 +1,35 @@
+[project]
+name = "agentic-workflows"
+version = "0.1.0"
+description = "Standalone, multi-host agentic development workflows: planning, parallel subagent-driven development, code review loops, and guard hooks for Claude Code and ZCode."
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+# Runtime is stdlib-only on purpose: consumers install this system into
+# arbitrary-language repos via symlink and invoke everything with plain python3.
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+    "E501", # long lines allowed in prose-adjacent strings
+    "UP035", # vendored code supports older pythons via typing.List-style imports
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Hook entry scripts must run as __main__ with sys.path bootstrap.
+"hooks/*.py" = ["E402"]
+"scripts/*.py" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

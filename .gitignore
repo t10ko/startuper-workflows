@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Tooling local state
+.claude/settings.local.json
+logs/
+verify/review_reports/
+verify/antipattern_reports/
+verify/duplication_reports/
+
+# Agent-owned worktrees (per-run, never committed)
+.agents/worktrees/
+
+# Run artifacts
+docs/runs/plan-runs/
+docs/plans/
+docs/specs/grounding/
+docs/decision-notes/
+
+# OS
+.DS_Store
