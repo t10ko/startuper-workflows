@@ -7,7 +7,7 @@ A run follows the workflow text as of its start; a later change to the text bind
 Before creating anything, check for three things left behind by an earlier,
 interrupted invocation of this workflow:
 
-- Pre-existing worktrees at `.agents/worktrees/<group-slug>`.
+- Pre-existing worktrees at `.agents.worktrees/<group-slug>`.
 - A legacy run-state file at `docs/runs/parallel-run-state.md` — kept
   indefinitely as a live artifact for any run that predates this workflow's
   branch/commit/push/PR model — whose run is not marked finished.
@@ -44,7 +44,7 @@ If any of these is found:
      how that directory resolves — it is never the flat
      `docs/runs/progress.md`), and continue from there.
   2. **Discard and clean** — remove the stale worktrees and branches. Every
-     worktree this workflow creates lives at `.agents/worktrees/<group-slug>`,
+     worktree this workflow creates lives at `.agents.worktrees/<group-slug>`,
      the agent-owned root, so `git worktree remove --force <absolute path>`
      (and, for its `sdd/`/`plan/` branch, `git branch -D`) is now the
      prescribed way to clear one, uncommitted changes included — there is
@@ -257,7 +257,7 @@ rule (`dispatch-and-briefs.md` Step 2).
    `Run status: InProgress`, the branch name in the `Branch` field, and the
    integration worktree's path already in the `Integration worktree` field —
    a single write, since both are already known by this point
-   (`<main-checkout-absolute-path>/.agents/worktrees/<run-slug>`). **This
+   (`<main-checkout-absolute-path>/.agents.worktrees/<run-slug>`). **This
    record must be written before the worktree is acquired** (item 5): the
    acquire script derives its cap-count exemption for the run's integration
    worktree from exactly this record, and a missing record exempts nothing —
@@ -302,7 +302,7 @@ group worktrees. Once committed on the integration branch, subsequent group work
 ### Single-Group & Linear Sequential Chain Fast Path (1 Worktree)
 
 When the plan decomposes into **exactly one task group** or a **purely linear sequential chain** of groups (where every subsequent group is `Sequential (must follow <group>)` with no concurrent sibling groups):
-- **Consolidated worktree:** Step 0.5 and Step 1 are unified. The integration worktree acquired at `<main-checkout-absolute-path>/.agents/worktrees/<run-slug>` also serves directly as the execution worktree for all groups in the linear chain.
+- **Consolidated worktree:** Step 0.5 and Step 1 are unified. The integration worktree acquired at `<main-checkout-absolute-path>/.agents.worktrees/<run-slug>` also serves directly as the execution worktree for all groups in the linear chain.
 - **No secondary checkout:** Skip acquiring secondary worktrees or creating separate group branches. The groups execute serially, directly within the integration worktree on the run's branch.
 - **No duplicate bootstrap:** Skip duplicate dependency-bootstrap runs for each group.
 - **Workspace & ledger:** Resolve `<plan-workspace>` directly in this integration worktree via `python3 .agents/scripts/sdd_workspace.py PLAN_FILE`. The ledger is `<plan-workspace>/progress.md`.
@@ -346,7 +346,7 @@ For each group in a multi-group plan as it becomes eligible:
    cap counts only this run's leases, so another run's worktrees never
    block a group and are never touched. The script creates one dedicated
    worktree and branch per
-   group at `<main-checkout-absolute-path>/.agents/worktrees/<group-slug>`,
+   group at `<main-checkout-absolute-path>/.agents.worktrees/<group-slug>`,
    branching from the run's own branch created in Step 0.5 — never from
    whatever happens to be checked out in the main working tree (or, for a
    `Sequential` group, from the integration branch's current tip at the

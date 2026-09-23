@@ -12,7 +12,7 @@ from pathlib import Path
 
 # The one directory this repo's agents create worktrees under, relative to the
 # main checkout. A worktree is "agent-owned" iff it is a DIRECT child of it.
-AGENT_WORKTREE_ROOT = Path(".agents/worktrees")
+AGENT_WORKTREE_ROOT = Path(".agents.worktrees")
 
 # The probes below raise more than `OSError` (measured on CPython 3.12.12):
 # `resolve()` raises `ValueError` on an embedded NUL and `RuntimeError` on a
@@ -85,7 +85,7 @@ def enclosing_checkout_root(location: Path | None) -> Path | None:
     nearest `.git` entry at or above it. Agents run commands from
     subdirectories all the time, so ownership is tested against this root
     rather than the raw location — the same tolerance `cwd_is_linked_worktree`
-    already has. Also means a bare `mkdir .agents/worktrees/fake` is not
+    already has. Also means a bare `mkdir .agents.worktrees/fake` is not
     agent-owned: the walk finds the main checkout's `.git` and yields the main
     checkout, whose own parent is not the agent root."""
 
@@ -97,18 +97,18 @@ def enclosing_checkout_root(location: Path | None) -> Path | None:
 
 def is_agent_owned_worktree(location: Path | None, cwd: Path | None) -> bool:
     """True when `location` is a worktree this repo's agents own: a DIRECT
-    child of `<main checkout>/.agents/worktrees`. Ownership is decided by path
+    child of `<main checkout>/.agents.worktrees`. Ownership is decided by path
     alone — branch, contents and git metadata are never consulted.
 
     The main checkout is always anchored on the session `cwd` (via
     `main_checkout_root`, which follows a linked worktree's `gitdir:` line back
     to the main working tree), never on a `-C`/`--git-dir`/`--work-tree`
     override, so a command cannot aim this test at another repository's
-    `.agents/worktrees`.
+    `.agents.worktrees`.
 
     `location` is fully resolved while the root is joined onto the resolved
-    main checkout LITERALLY, so a symlink at `.agents/worktrees/<name>` — or at
-    `.agents/worktrees` itself — resolves out of the literal root and is
+    main checkout LITERALLY, so a symlink at `.agents.worktrees/<name>` — or at
+    `.agents.worktrees` itself — resolves out of the literal root and is
     denied. Fails closed (False) when `location` is None or not absolute, when
     the main checkout cannot be resolved, and when resolving raises — an
     embedded NUL (`ValueError`), a symlink loop (`RuntimeError`), or an OS

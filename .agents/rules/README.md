@@ -31,7 +31,7 @@ rules/
 └── sizing-agent-work.md
 ```
 
-- `agent-worktrees.md` is the auto-loaded, agent-facing statement of the agent-owned worktree rule: `.agents/worktrees/<name>` is the one root where `git worktree add` succeeds and where a working-tree-scoped deny-list drops away; force-removing a worktree and force-deleting an `sdd/`/`plan/` branch are separately gated by target, not by standing inside one; shared-repo-state commands (`config`, `remote`, `gc --prune`, `reflog expire`, and `send-pack`) stay blocked everywhere, while `push` keeps its own separate, unchanged canonical-form authorization; and path-based ownership is a guardrail, not a security boundary against arbitrary Bash.
+- `agent-worktrees.md` is the auto-loaded, agent-facing statement of the agent-owned worktree rule: `.agents.worktrees/<name>` is the one root where `git worktree add` succeeds and where a working-tree-scoped deny-list drops away; force-removing a worktree and force-deleting an `sdd/`/`plan/` branch are separately gated by target, not by standing inside one; shared-repo-state commands (`config`, `remote`, `gc --prune`, `reflog expire`, and `send-pack`) stay blocked everywhere, while `push` keeps its own separate, unchanged canonical-form authorization; and path-based ownership is a guardrail, not a security boundary against arbitrary Bash.
 - `architectural-reliability.md` enforces simplicity and design-time fault avoidance: prefer the simplest design, reuse established patterns, and don't abstract around hypothetical variation.
 - `auto-skills.md` holds always-on behavioral skills.
 - `block-git-mutations.md` mirrors the git-mutation-blocking hook's deny-list (blocks a specific set of destructive patterns; most git commands are allowed) for passive rule systems.

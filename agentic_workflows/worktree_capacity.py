@@ -247,7 +247,7 @@ def count_agent_worktrees(
 ) -> int:
     """How many listed worktrees count against the GLOBAL on-disk view.
 
-    Only direct children of the agent-owned root (`.agents/worktrees`)
+    Only direct children of the agent-owned root (`.agents.worktrees`)
     count -- the same ownership definition the git-write guard enforces --
     and the caller passes the exemption in, so the counting rule cannot
     grow a private opinion about what is exempt (REQ-008's counting note).

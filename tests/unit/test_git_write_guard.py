@@ -52,10 +52,10 @@ def _worktree_pair(tmp_path: Path) -> tuple[Path, Path]:
 
 def _repo_with_agent_worktree(tmp_path: Path, name: str) -> tuple[Path, Path]:
     """Main checkout plus a real linked worktree at
-    <main>/.agents/worktrees/<name>."""
+    <main>/.agents.worktrees/<name>."""
     main_repo = tmp_path / "main-repo"
     (main_repo / ".git" / "worktrees" / name).mkdir(parents=True)
-    worktree = main_repo / ".agents" / "worktrees" / name
+    worktree = main_repo / ".agents.worktrees" / name
     worktree.mkdir(parents=True)
     (worktree / ".git").write_text(
         f"gitdir: {main_repo}/.git/worktrees/{name}\n", encoding="utf-8"
@@ -587,9 +587,9 @@ def test_reflog_blocked_only_on_expire_or_delete(command: str, expected: bool):
 @pytest.mark.parametrize(
     ("target", "expected"),
     [
-        (".agents/worktrees/x", False),
+        (".agents.worktrees/x", False),
         # A DIRECT child only — one level deeper is not the agent-owned root.
-        (".agents/worktrees/x/y", True),
+        (".agents.worktrees/x/y", True),
         (".agents/x", True),
         # The legacy root gets no grandfather clause.
         (".worktrees/x", True),
@@ -612,7 +612,7 @@ def test_worktree_add_and_forced_remove_require_agent_owned_target(
     [
         "git worktree remove ../anything",
         "git worktree remove /tmp/x",
-        "git worktree remove .agents/worktrees/wt",
+        "git worktree remove .agents.worktrees/wt",
     ],
 )
 def test_non_forced_worktree_remove_stays_unrestricted(tmp_path: Path, command: str):
@@ -626,18 +626,18 @@ def test_non_forced_worktree_remove_stays_unrestricted(tmp_path: Path, command: 
 @pytest.mark.parametrize(
     ("add_args", "expected"),
     [
-        ("-b sdd/x .agents/worktrees/y", False),
+        ("-b sdd/x .agents.worktrees/y", False),
         # The `-b` VALUE must never be mistaken for the path operand.
-        ("-b .agents/worktrees/y /elsewhere", True),
-        ("-B .agents/worktrees/y /elsewhere", True),
-        ("--lock --reason .agents/worktrees/y /elsewhere", True),
+        ("-b .agents.worktrees/y /elsewhere", True),
+        ("-B .agents.worktrees/y /elsewhere", True),
+        ("--lock --reason .agents.worktrees/y /elsewhere", True),
         # Attached forms are single tokens starting with `-`, so they are
         # skipped as plain flags and the next token is the real operand.
-        ("-bsdd/x .agents/worktrees/y", False),
+        ("-bsdd/x .agents.worktrees/y", False),
         ("-bsdd/x /elsewhere", True),
-        ("--reason=why .agents/worktrees/y", False),
+        ("--reason=why .agents.worktrees/y", False),
         ("--reason=why /elsewhere", True),
-        ("-f --detach .agents/worktrees/y HEAD~1", False),
+        ("-f --detach .agents.worktrees/y HEAD~1", False),
         # Fail closed when no path operand can be found at all.
         ("", True),
         ("-b sdd/x", True),
@@ -683,7 +683,7 @@ def test_worktree_target_fails_closed_when_resolution_base_is_unknowable(
     tmp_path: Path, prefix: str, action: str
 ):
     _main_repo, _worktree = _repo_with_agent_worktree(tmp_path, "wt")
-    command = f"git {prefix}worktree {action} .agents/worktrees/wt"
+    command = f"git {prefix}worktree {action} .agents.worktrees/wt"
     assert is_git_dangerous_command(command, None) is True
 
 
@@ -707,7 +707,7 @@ def test_worktree_target_resolves_relative_operand_against_dash_c(
         "agent-worktree": agent_worktree,
         "non-agent-worktree": _non_agent_worktree(tmp_path, main_repo),
     }
-    command = f"git -C {main_repo} worktree {action} .agents/worktrees/wt"
+    command = f"git -C {main_repo} worktree {action} .agents.worktrees/wt"
     assert is_git_dangerous_command(command, cwds[cwd_kind]) is False
 
 
@@ -729,7 +729,7 @@ def test_repeated_dash_c_options_compound(tmp_path: Path, options: str, expected
     away = tmp_path / "away"
     away.mkdir()
     resolved = options.format(main=main_repo, away=away)
-    command = f"git {resolved} worktree remove --force .agents/worktrees/wt"
+    command = f"git {resolved} worktree remove --force .agents.worktrees/wt"
     assert is_git_dangerous_command(command, main_repo) is expected
 
 
@@ -739,8 +739,8 @@ def test_worktree_target_follows_dash_c_out_of_the_repo(tmp_path: Path):
     # names a directory outside the agent root.
     main_repo, _worktree = _repo_with_agent_worktree(tmp_path, "wt")
     elsewhere = tmp_path / "elsewhere"
-    (elsewhere / ".agents" / "worktrees" / "wt").mkdir(parents=True)
-    command = f"git -C {elsewhere} worktree remove --force .agents/worktrees/wt"
+    (elsewhere / ".agents.worktrees" / "wt").mkdir(parents=True)
+    command = f"git -C {elsewhere} worktree remove --force .agents.worktrees/wt"
     assert is_git_dangerous_command(command, main_repo) is True
 
 
@@ -758,7 +758,7 @@ def test_non_chdir_location_options_leave_the_operand_on_the_session_cwd(
     main_repo, _worktree = _repo_with_agent_worktree(tmp_path, "wt")
     subdir = main_repo / "src"
     subdir.mkdir()
-    tail = "worktree remove --force .agents/worktrees/wt"
+    tail = "worktree remove --force .agents.worktrees/wt"
     assert is_git_dangerous_command(
         f"git {prefix.format(main=main_repo)}{tail}", subdir
     )
@@ -785,7 +785,7 @@ def test_absolute_worktree_operands_ignore_every_location_option(
     elsewhere = tmp_path / "elsewhere"
     elsewhere.mkdir()
     target = (
-        main_repo / ".agents" / "worktrees" / "x" if agent_owned else elsewhere / "x"
+        main_repo / ".agents.worktrees" / "x" if agent_owned else elsewhere / "x"
     )
     resolved = prefix.format(main=main_repo, elsewhere=elsewhere)
     command = f"git {resolved}worktree remove --force {target}"
@@ -795,12 +795,12 @@ def test_absolute_worktree_operands_ignore_every_location_option(
 @pytest.mark.parametrize(
     ("subdir", "target", "expected"),
     [
-        ("", ".agents/worktrees/x", False),
-        ("", ".agents/worktrees/x/", False),
-        ("src", "../.agents/worktrees/x", False),
+        ("", ".agents.worktrees/x", False),
+        ("", ".agents.worktrees/x/", False),
+        ("src", "../.agents.worktrees/x", False),
         # Resolving against the subdirectory instead of the main checkout would
-        # make <main>/src/.agents/worktrees/x look agent-owned. It is not.
-        ("src", ".agents/worktrees/x", True),
+        # make <main>/src/.agents.worktrees/x look agent-owned. It is not.
+        ("src", ".agents.worktrees/x", True),
     ],
 )
 def test_worktree_target_resolves_relative_operand_against_session_cwd(
@@ -819,7 +819,7 @@ def test_worktree_target_symlinked_out_of_the_agent_root_is_blocked(tmp_path: Pa
     main_repo, _worktree = _repo_with_agent_worktree(tmp_path, "wt")
     outside = tmp_path / "outside"
     outside.mkdir()
-    link = main_repo / ".agents" / "worktrees" / "x"
+    link = main_repo / ".agents.worktrees" / "x"
     link.symlink_to(outside)
     command = f"git worktree remove -f {link}"
     assert is_git_dangerous_command(command, main_repo) is True
@@ -843,7 +843,7 @@ def test_agent_ownership_anchors_on_the_main_checkout_from_any_worktree(
         "agent-worktree": agent_worktree,
         "non-agent-worktree": _non_agent_worktree(tmp_path, main_repo),
     }
-    target = main_repo / ".agents" / "worktrees" / "target"
+    target = main_repo / ".agents.worktrees" / "target"
     command = f"git worktree add {target}"
     assert is_git_dangerous_command(command, cwds[cwd_kind]) is False
 
@@ -867,7 +867,7 @@ def _capacity_probe(
         f"[worktrees]\nmax_concurrent = {max_concurrent}\n", encoding="utf-8"
     )
     porcelain = f"worktree {main_repo}\n\n" + "".join(
-        f"worktree {main_repo / '.agents' / 'worktrees' / name}\n"
+        f"worktree {main_repo / '.agents.worktrees' / name}\n"
         f"branch refs/heads/sdd/{name}\n\n"
         for name in listed_agent_worktrees
     )
@@ -897,7 +897,7 @@ def test_raw_worktree_add_denied_past_cap_allowed_under_cap(
     # at the acquire script; with a slot free, today's agent-owned-root
     # authorization is unchanged.
     main_repo, _existing = _repo_with_agent_worktree(tmp_path, "wt")
-    target = main_repo / ".agents" / "worktrees" / "next"
+    target = main_repo / ".agents.worktrees" / "next"
     command = f"git worktree add {target}"
     message = build_git_danger_block_message(
         command,
@@ -927,7 +927,7 @@ def test_undecidable_capacity_denies_the_raw_add_fail_closed(tmp_path: Path):
     # unbound it. The script stays the escape hatch — it fails on the same
     # input with exit 2.
     main_repo, _existing = _repo_with_agent_worktree(tmp_path, "wt")
-    target = main_repo / ".agents" / "worktrees" / "next"
+    target = main_repo / ".agents.worktrees" / "next"
 
     def undecidable(repo_root: Path) -> CapacitySnapshot:
         raise WorktreeCapacityError(
@@ -968,7 +968,7 @@ def test_crashing_probe_denies_the_raw_add_fail_closed(
     # no denial anywhere. The crash is refused exactly like an undecidable
     # input — a denial naming the failure, never an allow.
     main_repo, _existing = _repo_with_agent_worktree(tmp_path, "wt")
-    target = main_repo / ".agents" / "worktrees" / "next"
+    target = main_repo / ".agents.worktrees" / "next"
 
     def crashing(repo_root: Path) -> CapacitySnapshot:
         raise probe_error
@@ -993,13 +993,13 @@ def test_run_record_with_unresolvable_worktree_value_denies_fail_closed(
     # into the denial — never a crash the hook would report as non-blocking
     # while an at-cap raw add proceeds.
     main_repo, _existing = _repo_with_agent_worktree(tmp_path, "wt")
-    target = main_repo / ".agents" / "worktrees" / "next"
+    target = main_repo / ".agents.worktrees" / "next"
     config_path = main_repo / ".agents" / "config.toml"
     config_path.parent.mkdir(parents=True, exist_ok=True)
     config_path.write_text("[worktrees]\nmax_concurrent = 1\n", encoding="utf-8")
     porcelain = (
         f"worktree {main_repo}\n\n"
-        f"worktree {main_repo / '.agents' / 'worktrees' / 'wt'}\n"
+        f"worktree {main_repo / '.agents.worktrees' / 'wt'}\n"
         "branch refs/heads/sdd/wt\n\n"
     )
     records_dir = main_repo / record_path_for_branch("plan/run-slug").parent
@@ -1009,7 +1009,7 @@ def test_run_record_with_unresolvable_worktree_value_denies_fail_closed(
             status="InProgress",
             branch="plan/run-slug",
             integration_worktree=(
-                f"{main_repo / '.agents' / 'worktrees' / 'recorded'}\x00"
+                f"{main_repo / '.agents.worktrees' / 'recorded'}\x00"
             ),
             verify_status_sha="",
             secret_scan_clean_sha="",
@@ -1043,7 +1043,7 @@ def test_default_probe_anchors_the_cap_config_on_the_main_checkout(tmp_path: Pat
     # proves the anchor: pytest's CWD (the real repo, which has a config) was
     # never consulted.
     main_repo, _existing = _repo_with_agent_worktree(tmp_path, "wt")
-    target = main_repo / ".agents" / "worktrees" / "next"
+    target = main_repo / ".agents.worktrees" / "next"
     message = build_git_danger_block_message(f"git worktree add {target}", main_repo)
     assert message is not None
     assert "scripts/worktree_acquire.py" in message
@@ -1280,7 +1280,7 @@ def test_a_value_error_raised_after_parsing_still_reports_a_git_block(tmp_path: 
     # worktree-ownership resolution, long after tokenization has succeeded. It
     # reaches the same handler and must not be relabelled a parse failure.
     main_repo = _main_checkout_cwd(tmp_path)
-    agent_owned = main_repo / ".agents" / "worktrees" / "wt"
+    agent_owned = main_repo / ".agents.worktrees" / "wt"
     parseable = f"git worktree add {agent_owned}"
 
     assert (

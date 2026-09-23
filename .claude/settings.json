@@ -21,7 +21,7 @@
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.agents/hooks/block_git_mutations.py\""
           }
         ],
-        "description": "Block a specific set of dangerous git operations (force flags, hard resets, branch/commit switching), except inside an agent-owned worktree (.agents/worktrees/<name>); push is blocked except the one canonical `git push -u origin HEAD:<branch>` form."
+        "description": "Block a specific set of dangerous git operations (force flags, hard resets, branch/commit switching), except inside an agent-owned worktree (.agents.worktrees/<name>); push is blocked except the one canonical `git push -u origin HEAD:<branch>` form."
       },
       {
         "matcher": "Bash",

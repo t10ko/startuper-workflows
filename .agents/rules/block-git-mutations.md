@@ -50,7 +50,7 @@ base rules), and any linked worktree, which relaxes `--no-verify` and
 `git commit` only (via `_cwd_is_linked_worktree` — see their own sections
 further down). A third, narrower tier sits on top of those: an
 **agent-owned worktree** is a direct child of
-`<main checkout>/.agents/worktrees/`. Inside one, exactly the subcommands
+`<main checkout>/.agents.worktrees/`. Inside one, exactly the subcommands
 the block above classifies as worktree-local are fully unblocked regardless
 of flags; every subcommand it classifies repository-wide or unverified keeps
 exactly the behavior documented in the sections below, in this tier too.
@@ -70,7 +70,7 @@ worktree-local) resolves
 `-C`/`--git-dir`/`--work-tree` the same way `git commit`'s linked-worktree
 check already does (see that section below): authorization follows the
 *effective* checkout location, not the literal `cwd`, in both directions.
-`git -C .agents/worktrees/x reset --hard` run from the main checkout is
+`git -C .agents.worktrees/x reset --hard` run from the main checkout is
 authorized; `git -C <main-checkout> reset --hard` run with the session's own
 `cwd` inside an agent-owned worktree is still blocked, because the effective
 location it resolves to is the main checkout, not the worktree — the same
@@ -99,7 +99,7 @@ very command being evaluated has not happened yet from the guard's point of
 view, so it changes nothing — this is the mistake every agent hits first:
 
 ```bash
-cd .agents/worktrees/my-group && git reset --hard    # BLOCKED — still
+cd .agents.worktrees/my-group && git reset --hard    # BLOCKED — still
                                                        # evaluated against
                                                        # the pre-command cwd
 ```
@@ -108,12 +108,12 @@ Two forms work instead. Prefer the first — it does not depend on any shell
 state persisting between tool calls:
 
 ```bash
-git -C .agents/worktrees/my-group reset --hard        # recommended: works
+git -C .agents.worktrees/my-group reset --hard        # recommended: works
                                                         # regardless of cwd
 ```
 
 ```bash
-cd .agents/worktrees/my-group   # one call
+cd .agents.worktrees/my-group   # one call
 git reset --hard                # a separate, later call — now the reported
                                  # cwd really is the worktree
 ```
@@ -224,14 +224,14 @@ their own bullets below.
     invocation naming even one non-`sdd/`/`plan/` branch is still blocked.
   - `git worktree remove --force`/`-f` is additionally allowed when its
     `<path>` operand resolves to an agent-owned worktree (parent exactly
-    `<main checkout>/.agents/worktrees`) — the *resolved* target decides,
+    `<main checkout>/.agents.worktrees`) — the *resolved* target decides,
     not raw location, but a relative operand needs a base to resolve
     against first:
 
     ```bash
-    git worktree remove --force .agents/worktrees/agentwt                        # cwd = main checkout     -> allowed
-    git worktree remove --force .agents/worktrees/agentwt                        # cwd = an agent worktree -> blocked
-    git -C <main checkout> worktree remove --force .agents/worktrees/agentwt     # any cwd inside the repo -> allowed
+    git worktree remove --force .agents.worktrees/agentwt                        # cwd = main checkout     -> allowed
+    git worktree remove --force .agents.worktrees/agentwt                        # cwd = an agent worktree -> blocked
+    git -C <main checkout> worktree remove --force .agents.worktrees/agentwt     # any cwd inside the repo -> allowed
     ```
 
     A bare relative operand resolves against the session's own `cwd`, so
@@ -252,7 +252,7 @@ their own bullets below.
     the ownership test itself: that anchor always follows the session's own
     actual working directory, walked back to its own main checkout, never
     the `-C` value. This is deliberate — otherwise a command could aim the
-    ownership test at some other repository's `.agents/worktrees` entirely
+    ownership test at some other repository's `.agents.worktrees` entirely
     — but the consequence is that a shell sitting outside this repository
     can never establish which checkout is "the" main one, so every worktree
     command fails closed there regardless of how the path is written. The
@@ -547,7 +547,7 @@ inspection (`status`, `diff`, `log`, `show`, `blame`, `grep`, etc.).
 
 `worktree add` is no longer unconditionally allowed: its `<path>` operand
 must itself be agent-owned (a direct child of
-`<main checkout>/.agents/worktrees`), or it is blocked — see "Agent-owned
+`<main checkout>/.agents.worktrees`), or it is blocked — see "Agent-owned
 worktrees: a third relaxation tier" above. This is the one entry that moved
 out of this "allowed by default" list rather than into it.
 
@@ -586,7 +586,7 @@ SHAs — so the skipped pre-commit checks must still be caught by that round's
 project verify command and secret scan before the branch is merged.
 
 A loop running with `cwd` inside an agent-owned worktree specifically (a
-direct child of `<main checkout>/.agents/worktrees`, strictly narrower than
+direct child of `<main checkout>/.agents.worktrees`, strictly narrower than
 "any linked worktree" above) can go considerably further on its own, with no
 additional approval: every subcommand the generated block in "Agent-owned
 worktrees: a third relaxation tier" above classifies as worktree-local runs

@@ -278,7 +278,7 @@ context. Then, every dispatch turn:
   `.agents/config.toml` (`[worktrees] max_concurrent`), read through
   `agentic_workflows/worktree_capacity` by `.agents/scripts/worktree_acquire.py` and the
   Claude Code hook backstop; agents never change it. The cap counts
-  **worktrees leased to the calling run under `.agents/worktrees/`** (other
+  **worktrees leased to the calling run under `.agents.worktrees/`** (other
   runs' worktrees never count against a run and are never touched by it;
   the run's single integration worktree is exempt, so groups and
   review-fix batches hold all

@@ -1,7 +1,7 @@
 """Mediate every agent-worktree create/reuse/remove decision (REQ-007).
 
 The one script agents use to acquire, inspect, and release worktrees under
-`.agents/worktrees/`, enforcing the PER-RUN cap N from `.agents/config.toml`
+`.agents.worktrees/`, enforcing the PER-RUN cap N from `.agents/config.toml`
 through the shared `agentic_workflows.worktree_capacity` module (REQ-008, revised
 2026-09-17): the cap counts ONLY worktrees leased to the calling run --
 identified by the required `--run <branch>` -- while other runs' worktrees,
@@ -389,7 +389,7 @@ def _create_worktree(
     context: _CliContext, target: Path, branch: str, run_branch: str
 ) -> str | None:
     """Create the worktree in the guard-approved fully-substituted shape:
-    `git -C <main-checkout> worktree add <main-checkout>/.agents/worktrees/
+    `git -C <main-checkout> worktree add <main-checkout>/.agents.worktrees/
     <name> -b <branch> refs/heads/<run-branch>` for a new branch, or
     `... <name> <branch>` when the branch already exists (see
     `_branch_operands`)."""
@@ -735,7 +735,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     acquire_parser.add_argument(
         "--name",
         required=True,
-        help="Worktree directory name under .agents/worktrees/.",
+        help="Worktree directory name under .agents.worktrees/.",
     )
     acquire_parser.add_argument(
         "--branch",
@@ -766,7 +766,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     release_parser.add_argument(
         "--name",
         required=True,
-        help="Worktree directory name under .agents/worktrees/.",
+        help="Worktree directory name under .agents.worktrees/.",
     )
     release_parser.add_argument(
         "--run",

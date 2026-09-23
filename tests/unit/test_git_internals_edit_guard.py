@@ -90,7 +90,7 @@ def _run_hook(
         ("/repo/.git/refs/heads/main", True),
         ("/repo/.git/objects/ab/cdef", True),
         ("/repo/.git/info/exclude", True),
-        ("/repo/.agents/worktrees/wt/.git", True),
+        ("/repo/.agents.worktrees/wt/.git", True),
         ("/repo/src/utils/config.py", False),
         ("/repo/books/my-book/config.json", False),
         ("/repo/.github/workflows/ci.yml", False),
@@ -109,7 +109,7 @@ def test_worktree_pointer_file_rewrite_is_refused(tmp_path: Path):
 
     main = tmp_path / "main"
     (main / ".git" / "worktrees" / "wt").mkdir(parents=True)
-    attacker = main / ".agents" / "worktrees" / "wt"
+    attacker = main / ".agents.worktrees" / "wt"
     attacker.mkdir(parents=True)
     pointer = attacker / ".git"
     pointer.write_text(
@@ -119,7 +119,7 @@ def test_worktree_pointer_file_rewrite_is_refused(tmp_path: Path):
 
     forged = tmp_path / "forged"
     (forged / ".git" / "worktrees" / "victim").mkdir(parents=True)
-    victim = forged / ".agents" / "worktrees" / "victim"
+    victim = forged / ".agents.worktrees" / "victim"
     victim.mkdir(parents=True)
     (victim / ".git").write_text(
         f"gitdir: {(forged / '.git' / 'worktrees' / 'victim').as_posix()}\n",
@@ -222,7 +222,7 @@ def test_alternate_case_pointer_file_rewrite_is_refused(tmp_path: Path):
 
     main = tmp_path / "main"
     (main / ".git" / "worktrees" / "wt").mkdir(parents=True)
-    attacker = main / ".agents" / "worktrees" / "wt"
+    attacker = main / ".agents.worktrees" / "wt"
     attacker.mkdir(parents=True)
     pointer = attacker / ".git"
     pointer.write_text(
@@ -232,7 +232,7 @@ def test_alternate_case_pointer_file_rewrite_is_refused(tmp_path: Path):
 
     forged = tmp_path / "forged"
     (forged / ".git" / "worktrees" / "victim").mkdir(parents=True)
-    victim = forged / ".agents" / "worktrees" / "victim"
+    victim = forged / ".agents.worktrees" / "victim"
     victim.mkdir(parents=True)
     (victim / ".git").write_text(
         f"gitdir: {(forged / '.git' / 'worktrees' / 'victim').as_posix()}\n",

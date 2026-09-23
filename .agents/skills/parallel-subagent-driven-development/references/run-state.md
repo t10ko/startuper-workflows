@@ -196,7 +196,7 @@ its branch before removing the tree (commit-then-remove, never a discard);
 a dirty tree held by another run is refused — your run never touches
 another run's worktree.
 
-Every worktree in this lifecycle lives at `.agents/worktrees/<name>` — the
+Every worktree in this lifecycle lives at `.agents.worktrees/<name>` — the
 one agent-owned root — and its lifecycle states (free / held / released)
 are the script's lease ledger's business, recorded
 under that root; the run-state record carries only each group's worktree

@@ -21,8 +21,8 @@ usable in practice.
 ## The agent-owned root
 
 A path is an **agent-owned worktree** iff, resolved to an absolute
-normalized path, its parent is exactly `<main checkout>/.agents/worktrees`.
-Direct children only — `.agents/worktrees/x/y` does not qualify. Neither does
+normalized path, its parent is exactly `<main checkout>/.agents.worktrees`.
+Direct children only — `.agents.worktrees/x/y` does not qualify. Neither does
 `.claude/worktrees/`: that directory belongs to the Claude Code harness's own
 worktree tool, is never created through a Bash `git` command this guard can
 see, and is not adopted as a second root — granting it the same powers would
@@ -121,10 +121,10 @@ find . -name '__pycache__' -type d -prune -exec rm -rf {} +
 Before this change, `git worktree add <path>` succeeded anywhere. Now its
 `<path>` operand must itself resolve to an agent-owned location, or the
 command is blocked outright: a worktree created outside
-`.agents/worktrees/` would lose every permission this file grants, and the
+`.agents.worktrees/` would lose every permission this file grants, and the
 block has no relaxation. Create worktrees with an
-absolute path (`git worktree add <main-checkout-absolute-path>/.agents/worktrees/<name>
-...`) or `git -C <main-checkout-path> worktree add .agents/worktrees/<name>
+absolute path (`git worktree add <main-checkout-absolute-path>/.agents.worktrees/<name>
+...`) or `git -C <main-checkout-path> worktree add .agents.worktrees/<name>
 ...` — a bare relative path resolves against the session's own `cwd`, so it
 only succeeds when that happens to already be the main checkout. See
 "`cwd` is a snapshot, not tracked shell state" below for why, and
@@ -149,7 +149,7 @@ hand-issued command bypasses the lease ledger and the durability refusal,
 and is prohibited for that reason, not merely discouraged.
 
 The cap those commands enforce is **N: the maximum number of agent
-worktrees leased to one run under `.agents/worktrees/` at any moment**
+worktrees leased to one run under `.agents.worktrees/` at any moment**
 (other runs' worktrees — leased or not — never count against your run and
 are never touched by it; the run's single integration worktree is exempt).
 The `--run` identity is self-asserted at this trust level: the cap and the
@@ -266,14 +266,14 @@ branch-name operand for deletion:
   `sdd/` or `plan/` — see "The `sdd/`/`plan/` carve-out" below. A branch
   name is never a filesystem path, so this one genuinely runs from
   anywhere, unaffected by `cwd`.
-- `git worktree remove --force .agents/worktrees/<name>` is authorized as
+- `git worktree remove --force .agents.worktrees/<name>` is authorized as
   long as its `<path>` operand *resolves* to an agent-owned worktree — but
   a relative operand needs a base to resolve against first:
 
   ```bash
-  git worktree remove --force .agents/worktrees/agentwt                      # cwd = main checkout     -> allowed
-  git worktree remove --force .agents/worktrees/agentwt                      # cwd = an agent worktree -> blocked
-  git -C <main-checkout-path> worktree remove --force .agents/worktrees/agentwt   # any cwd inside the repo -> allowed
+  git worktree remove --force .agents.worktrees/agentwt                      # cwd = main checkout     -> allowed
+  git worktree remove --force .agents.worktrees/agentwt                      # cwd = an agent worktree -> blocked
+  git -C <main-checkout-path> worktree remove --force .agents.worktrees/agentwt   # any cwd inside the repo -> allowed
   ```
 
   A bare relative operand resolves against the session's own `cwd`, so the
@@ -292,7 +292,7 @@ branch-name operand for deletion:
   checkout" for the ownership test — that anchor always follows the
   session's own actual working directory, never the `-C` value, precisely
   so a command can't aim the ownership test at some other repository's
-  `.agents/worktrees`. A shell standing outside this repository entirely
+  `.agents.worktrees`. A shell standing outside this repository entirely
   therefore still fails closed no matter how the path is written.
 
 This has to be target-gated rather than cwd-scoped in the first place: git
@@ -311,7 +311,7 @@ happened yet from the guard's point of view and changes nothing.
 
 - **In tool environments with an explicit per-command working-directory
   parameter:** Set that parameter directly to the worktree path (e.g.
-  `cwd: ".agents/worktrees/<name>"`) and run clean git subcommands (`git
+  `cwd: ".agents.worktrees/<name>"`) and run clean git subcommands (`git
   status`, `git add .`, `git commit -m "..."`). Never embed `-C <worktree-path>`
   in the command itself: dynamic path arguments break prefix-matching
   auto-approval and prompt for manual confirmation on every single command.
@@ -404,7 +404,7 @@ agent that can run arbitrary Bash:
   read as if it did. This remains the mirror image of the `worktree move`
   gap below: that one relabels a *target*; this one redirected the *root*
   the target is checked against.
-- `git worktree move <human-worktree> .agents/worktrees/pwned` relabels a
+- `git worktree move <human-worktree> .agents.worktrees/pwned` relabels a
   human's own worktree as agent-owned by path alone. A plain `mv` of the
   directory achieves the identical relabeling with no git subcommand at
   all — its operands name no protected path, so neither write guard sees

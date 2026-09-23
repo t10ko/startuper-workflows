@@ -16,8 +16,9 @@ verify/review_reports/
 verify/antipattern_reports/
 verify/duplication_reports/
 
-# Agent-owned worktrees (per-run, never committed)
-.agents/worktrees/
+# Agent-owned worktrees (per-run, never committed). Lives OUTSIDE the
+# symlinked .agents tree so concurrent consumer repos never share storage.
+.agents.worktrees/
 
 # Run artifacts
 docs/runs/plan-runs/
